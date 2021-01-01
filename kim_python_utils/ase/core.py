@@ -732,7 +732,7 @@ def get_model_energy_cutoff(
 
 ################################################################################
 class Model(object):
-    r""" Parent class for KIM tests written in python and uses ASE simulator.
+    """ Parent class for KIM tests written in python and uses ASE simulator.
     This class is needed if users wish to use custom parameters in the
     calculation of predictions, for example for uncertainty quantification.
 
@@ -742,39 +742,26 @@ class Model(object):
             String of the element to use, e.g. 'Ar' or 'Si'.
         config: str
             String to describe the configuration of atoms, e.g. 'bcc'.
-        model_id: str
+        modelname: str
             KIM ID of the interatomic model.
     """
 
-    def __init__(self, symbol, config, model_id):
+    def __init__(self, symbol, config, modelname):
         self.symbol = symbol
         self.config = config
-        self.model_id = model_id
-        self.calc = KIM(self.model_id)
+        self.modelname = modelname
+        self.calc = KIM(self.modelname)
 
     def reset_calculator(self):
-        r"""Reset calculator to use default parameters.
+        """Reset calculator to use default parameters.
         """
-        self.calc = KIM(self.model_id)
+        self.calc = KIM(self.modelname)
 
     def update_parameters(self, parameters):
-        r"""Wrapper to self.calc.set_parameter to update kim calculator with
+        """Wrapper to self.calc.set_parameters to update kim calculator with
         the parameters given.
-
-        Parameters
-        ----------
-            parameters: dictionary
-                User-defined parameters. The format of dictionary is
-                    parameters = {'name1' : [index_range, values],
-                                  'name2' : [index_range, values]}
-                extent and values can be just numbers, if users wish to only
-                update 1 value in the parameter, or a list, if users wish to
-                update multiple values in the parameter.
         """
-        for name, item in parameters.items():
-            self.calc.set_parameter(
-                name, item[0], item[1]
-            )
+        self.calc.set_parameters(**parameters)
 
 
 # If called directly, do nothing
